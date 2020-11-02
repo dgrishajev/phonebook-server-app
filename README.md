@@ -13,3 +13,15 @@ The base URL is http://localhost:3001, the main endpoints are the following:
 * GET /api/persons
 * POST /api/persons
 * DELETE /api/persons
+
+### How to deploy
+
+Push your changes to both GitHub and Heroku `main` branches:
+
+```
+$ git add .
+$ git push origin main
+$ git push heroku main
+```
+
+Changes will be live [here](https://young-cliffs-17816.herokuapp.com/).
