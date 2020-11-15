@@ -16,10 +16,9 @@ The base URL is http://localhost:3001, the main endpoints are the following:
 
 ### How to deploy
 
-Push your changes to both GitHub and Heroku `main` branches:
+Commit and then push your changes to both GitHub and Heroku `main` branches:
 
 ```
-$ git add .
 $ git push origin main
 $ git push heroku main
 ```

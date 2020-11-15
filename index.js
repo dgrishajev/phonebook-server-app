@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
@@ -32,21 +33,7 @@ let persons = [{
   number: '39-23-6423122',
 }]
 
-const generateId = () => {
-  const min = (
-    !persons.length
-      ? 0
-      : Math.max(...persons.map(({ id }) => id))
-  ) + 1
-  const max = 1000
-  let newId = null
-
-  do {
-    newId = Math.floor(Math.random() * (max - min + 1)) + min
-  } while (persons.find(({ id }) => id === newId))
-
-  return newId
-}
+const Person = require('./models/person')
 
 app.get('/', (req, res) => {
   res.send(`
@@ -69,48 +56,27 @@ app.get('/info', (req, res) => {
   `)
 })
 
-app.get('/api/persons', (req, res) => res.json(persons))
-
-app.get('/api/persons/:id', (req, res) => {
-  const personId = Number(req.params.id)
-  const matchId = ({ id }) => id === personId
-  const person = persons.find(matchId)
-
-  if (person) {
-    res.json(person)
-  } else {
-    res.status(404).end()
-  }
+app.get('/api/persons', (req, res) => {
+  Person.find({}).then(people => res.json(people))
 })
 
-app.post('/api/persons', (req, res) => {
-  const { body } = req
+app.get('/api/persons/:id', ({ params: { id } }, res) => {
+  Person.findById(id).then(person => res.json(person))
+})
 
+app.post('/api/persons', ({ body }, res) => {
   if (!body.name || !body.number) {
     return res.status(400).json({
       error: 'Both name and number required'
     })
   }
 
-  const matchName = ({ name }) => name === body.name
-
-  const existing = persons.find(matchName)
-
-  if (existing) {
-    return res.status(400).json({
-      error: 'Duplicated person name'
-    })
-  }
-
-  const person = {
-    id: generateId(),
+  const person = new Person({
     name: body.name,
     number: body.number,
-  }
+  })
 
-  persons = persons.concat(person)
-
-  res.json(person)
+  person.save().then(response => res.json(response))
 })
 
 app.delete('/api/persons/:id', (req, res) => {
@@ -121,7 +87,7 @@ app.delete('/api/persons/:id', (req, res) => {
   res.status(204).end()
 })
 
-const { PORT = 3001 } = process.env
+const { PORT } = process.env
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`)
