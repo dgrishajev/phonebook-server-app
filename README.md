@@ -26,7 +26,7 @@ The base URL is http://localhost:3001, the main endpoints are the following:
 
 ### How to deploy
 
-* Generate a [front-end](https://github.com/dgrishajev/fso-submissions/tree/main/part2/phonebook) `build` directory and place it at the root of this app
+* Generate a [front-end](https://github.com/dgrishajev/fso-submissions/tree/main/part3/phonebook) `build` directory and place it at the root of this app
 * [Create](https://signup.heroku.com/) a Heroku account and [install](https://devcenter.heroku.com/articles/getting-started-with-nodejs#set-up) its CLI on your machine
 * Create a Heroku application with `heroku create`
 * Commit your changes to GitHub with `git push origin main`
