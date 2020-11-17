@@ -26,14 +26,19 @@ if (argv.length > 3) {
 
   const person = new Person({ name, number })
 
-  person.save().then(res => {
-    console.log('person saved!')
-    console.log(res)
-    mongoose.connection.close()
-  })
+  person
+    .save()
+    .then(() => {
+      console.log(`added ${name} number ${number} to phonebook`)
+    })
+    .catch(error => console.log(error))
+    .finally(() => mongoose.connection.close())
 } else {
-  Person.find({}).then(res => {
-    res.forEach(item => console.log(item))
-    mongoose.connection.close()
-  })
+  console.log('phonebook:')
+  Person
+    .find({})
+    .then(res => {
+      res.forEach(({ name, number }) => console.log(`${name} ${number}`))
+      mongoose.connection.close()
+    })
 }
